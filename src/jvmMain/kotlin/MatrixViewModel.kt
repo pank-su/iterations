@@ -4,7 +4,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import kotlin.math.absoluteValue
 
+enum class Mode{
+    `Метод итераций`,
+    `Метод зейделя`
+}
+
 class MatrixViewModel {
+
+    var mode: Mode by mutableStateOf(Mode.`Метод итераций`)
     var iterations: Int by mutableStateOf(10)
     val logs: MutableList<String> = mutableStateListOf()
     var how: Int by mutableStateOf(2)
@@ -40,19 +47,28 @@ class MatrixViewModel {
             vals.add(matrixAnswerRes[i].toDouble() / Matrixes[i][i].toDouble())
         }
         var last_vals = vals.toMutableList()
+        val isZeidel = mode == Mode.`Метод зейделя`
 
         loop@ while (logs.size - 1 < iterations) {
-
-
             var log = ""
             for (i in 0..<how) {
                 log += "x_${i + 1} = ( ${matrixAnswerRes[i].toDouble()}"
                 var value = matrixAnswerRes[i].toDouble()
                 Matrixes[i].forEachIndexed { index, el ->
-                    // println(index)
+
                     if (i != index) {
-                        log += (if (-el > 0) " + " else " - ") + "${el.absoluteValue} * ${last_vals[index]}"
-                        value += -el * last_vals[index]
+                        if (!isZeidel) {
+                            log += (if (-el > 0) " + " else " - ") + "${el.absoluteValue} * ${last_vals[index]}"
+                            value += -el * last_vals[index]
+                        } else {
+                            if (index < i) {
+                                log += (if (-el > 0) " + " else " - ") + "${el.absoluteValue} * ${vals[index]}"
+                                value += -el * vals[index]
+                            } else {
+                                log += (if (-el > 0) " + " else " - ") + "${el.absoluteValue} * ${last_vals[index]}"
+                                value += -el * vals[index]
+                            }
+                        }
                     }
                 }
                 value /= Matrixes[i][i]

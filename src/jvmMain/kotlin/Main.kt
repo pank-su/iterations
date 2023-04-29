@@ -40,10 +40,24 @@ fun App() {
     MatrixTheme {
         Box(modifier = Modifier.fillMaxSize()) {
             val scrollState = rememberScrollState()
+
             Column(
                 modifier = Modifier.fillMaxWidth(),//.verticalScroll(scrollState),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    RadioButton(
+                        matrixViewModel.mode == Mode.`Метод итераций`,
+                        onClick = { matrixViewModel.mode = Mode.`Метод итераций` })
+                    Text("Метод итераций")
+                    RadioButton(
+                        matrixViewModel.mode == Mode.`Метод зейделя`,
+                        onClick = { matrixViewModel.mode = Mode.`Метод зейделя` })
+                    Text("Метод зейделя")
+                }
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(10.dp)
